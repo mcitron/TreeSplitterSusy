@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd $atdir
+source setup.sh
+cd - >& /dev/null
+
+pythonScript=${atdir}/../macros/TreeSplitterSusy/getMassInfoFromTree.py
+
+
+python $pythonScript -d $dir -o $out --sparticle $sparticle
+

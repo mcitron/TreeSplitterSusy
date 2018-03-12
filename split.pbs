@@ -1,0 +1,39 @@
+#!/bin/sh
+
+outTmpDir=${TMPDIR}
+
+echo "Will work in this directory: ${outTmpDir}"
+
+echo "Sourcing setup.sh in AlphaTools (needed to get CMSSW) ..."
+cd $atDir
+source setup.sh
+
+echo "Cd-ing in the temporary directory ..."
+cd ${outTmpDir}
+
+
+echo "Listing current directory:"
+ls -larth
+
+echo "Copying input tree and executable to the temporary output directory ..."
+eval ${copyCmd}
+cp ${exe} .
+
+mkdir -p out
+
+echo "Running executable ..."
+echo "  Temporary output directory: ${outTmpDir}"
+echo "  Final output directory: ${outDir}"
+echo "  Command that will be run: ./cutTreeSusy inTree.root ${outTmpDir}/out ${susyBName} ${mSusyMin} ${mSusyMax} ${mLspMin} ${mLspMax}"
+./cutTreeSusy inTree.root ${outTmpDir}/out $susyBName $mSusyMin $mSusyMax $mLspMin $mLspMax
+
+echo "Listing current directory (after job):"
+ls -larth out
+
+echo "Copying output tree to the final output directory ..."
+cp out/inTree.root ${outDir}/tree.root
+
+echo "Listing final output directory:"
+ls -larth $outDir
+
+
